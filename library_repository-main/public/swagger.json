@@ -1,0 +1,545 @@
+{
+  "consumes": [
+    "application/json",
+    "multipart/form-data"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "# Сервис библиотеки\n\n### При авторизации указывайте префикс `\"Bearer\"`, пример: `\"Bearer yourtoken12345\"`",
+    "title": "GolibraryAPI.",
+    "contact": {
+      "email": "yane.neya@mail.ru"
+    },
+    "version": "0.0.1"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "paths": {
+    "/author": {
+      "get": {
+        "description": "Получение списка авторов",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "authorListRequest",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/authorListResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      },
+      "post": {
+        "description": "Добавление нового автора",
+        "tags": [
+          "Author"
+        ],
+        "operationId": "authorCreateRequest",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateAuthorRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/authorCreateResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      }
+    },
+    "/book": {
+      "get": {
+        "description": "Получение списка книг",
+        "tags": [
+          "Book"
+        ],
+        "operationId": "bookListRequest",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/bookListResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      },
+      "post": {
+        "description": "Добавление новой книги",
+        "tags": [
+          "Book"
+        ],
+        "operationId": "bookCreateRequest",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateBookRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/bookCreateResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      }
+    },
+    "/rating": {
+      "get": {
+        "description": "Получение рейтинга авторов",
+        "tags": [
+          "Library"
+        ],
+        "operationId": "ratingListRequest",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/ratingListResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      }
+    },
+    "/rent": {
+      "get": {
+        "description": "Выдача книги",
+        "tags": [
+          "Library"
+        ],
+        "operationId": "rentRequest",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "bookID",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "userID",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/rentResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      }
+    },
+    "/return": {
+      "get": {
+        "description": "Возврат книги",
+        "tags": [
+          "Library"
+        ],
+        "operationId": "returnRequest",
+        "parameters": [
+          {
+            "type": "string",
+            "name": "bookID",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "name": "userID",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/returnResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "description": "Получение списка пользователей",
+        "tags": [
+          "User"
+        ],
+        "operationId": "userListRequest",
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userListResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      },
+      "post": {
+        "description": "Добавление нового пользователя",
+        "tags": [
+          "User"
+        ],
+        "operationId": "userCreateRequest",
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUserRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/userCreateResponse"
+          },
+          "400": {
+            "$ref": "#/responses/commonResponse"
+          },
+          "500": {
+            "$ref": "#/responses/commonResponse"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "AuthorDTO": {
+      "type": "object",
+      "properties": {
+        "books": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BookDTO"
+          },
+          "x-go-name": "Books"
+        },
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ID"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/models"
+    },
+    "BookDTO": {
+      "type": "object",
+      "properties": {
+        "authorid": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "AuthorID"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ID"
+        },
+        "readerid": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ReaderID"
+        },
+        "title": {
+          "type": "string",
+          "x-go-name": "Title"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/models"
+    },
+    "CreateAuthorRequest": {
+      "$ref": "#/definitions/AuthorDTO"
+    },
+    "CreateAuthorResponse": {
+      "$ref": "#/definitions/Response"
+    },
+    "CreateBookRequest": {
+      "$ref": "#/definitions/BookDTO"
+    },
+    "CreateBookResponse": {
+      "$ref": "#/definitions/Response"
+    },
+    "CreateUserRequest": {
+      "$ref": "#/definitions/UserDTO"
+    },
+    "CreateUserResponse": {
+      "$ref": "#/definitions/Response"
+    },
+    "GetAllAuthorsResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AuthorDTO"
+          },
+          "x-go-name": "Data"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "success": {
+          "type": "boolean",
+          "x-go-name": "Success"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/modules/library/controller"
+    },
+    "GetAllBooksResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BookDTO"
+          },
+          "x-go-name": "Data"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "success": {
+          "type": "boolean",
+          "x-go-name": "Success"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/modules/library/controller"
+    },
+    "GetAllUsersResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserDTO"
+          },
+          "x-go-name": "Data"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "success": {
+          "type": "boolean",
+          "x-go-name": "Success"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/modules/library/controller"
+    },
+    "GetRatingResponse": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RatingDTO"
+          },
+          "x-go-name": "Data"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "success": {
+          "type": "boolean",
+          "x-go-name": "Success"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/modules/library/controller"
+    },
+    "RatingDTO": {
+      "type": "object",
+      "properties": {
+        "author": {
+          "$ref": "#/definitions/AuthorDTO"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Count"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/models"
+    },
+    "RentBookResponse": {
+      "$ref": "#/definitions/Response"
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "data": {
+          "x-go-name": "Data"
+        },
+        "message": {
+          "type": "string",
+          "x-go-name": "Message"
+        },
+        "success": {
+          "type": "boolean",
+          "x-go-name": "Success"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/infrastructure/response"
+    },
+    "ReturnBookResponse": {
+      "$ref": "#/definitions/Response"
+    },
+    "UserDTO": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string",
+          "x-go-name": "FirstName"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "ID"
+        },
+        "lastname": {
+          "type": "string",
+          "x-go-name": "LastName"
+        },
+        "rentedbooks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BookDTO"
+          },
+          "x-go-name": "RentedBooks"
+        }
+      },
+      "x-go-package": "gitlab.com/hazhbulat/golibrary/internal/models"
+    }
+  },
+  "responses": {
+    "authorCreateResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/CreateAuthorResponse"
+      }
+    },
+    "authorListResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/GetAllAuthorsResponse"
+      }
+    },
+    "bookCreateResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/CreateBookResponse"
+      }
+    },
+    "bookListResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/GetAllBooksResponse"
+      }
+    },
+    "commonResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/Response"
+      }
+    },
+    "ratingListResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/GetRatingResponse"
+      }
+    },
+    "rentResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/RentBookResponse"
+      }
+    },
+    "returnResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/ReturnBookResponse"
+      }
+    },
+    "userCreateResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/CreateUserResponse"
+      }
+    },
+    "userListResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/GetAllUsersResponse"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
